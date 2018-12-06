@@ -5,41 +5,6 @@ import java.time.format.DateTimeFormatter
 import java.util.stream.IntStream
 import kotlin.streams.toList
 
-val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
-
-val shiftBeganRegex = """\[(\d+-\d+-\d+\W\d+:\d+)\]\WGuard\W#(\d+)\Wbegins\Wshift""".toRegex()
-val fellAsleepRegex = """\[(\d+-\d+-\d+\W\d+:\d+)\]\Wfalls\Wasleep""".toRegex()
-val wokeUpRegex = """\[(\d+-\d+-\d+\W\d+:\d+)\]\Wwakes\Wup""".toRegex()
-
-class State {
-
-    val guards = HashMap<Int, Int>()
-
-    var currentGuard : Int = 0
-    var fellAsleepAt : LocalDateTime = LocalDateTime.MAX
-
-    fun process(event: TimedEvent) {
-        when(event.type) {
-            EventType.SHIFT_BEGAN -> process(event as ShiftBeganEvent)
-            EventType.FELL_ASLEEP -> process(event as FellAsleepEvent)
-            EventType.WOKE_UP -> process(event as WokeUpEvent)
-            EventType.INVALID -> {}
-        }
-    }
-
-    private fun process(event: ShiftBeganEvent) {
-        currentGuard = event.guardId
-    }
-
-    private fun process(event: FellAsleepEvent) {
-
-    }
-
-    private fun process(event: WokeUpEvent) {
-
-    }
-}
-
 fun main(args: Array<String>) {
 
     // Read data from standard input
@@ -86,8 +51,12 @@ fun main(args: Array<String>) {
             .maxBy { it.value?.value ?: 0 } ?: return
 
     println("Guard #${secondGuard.key} is most frequently asleep during minute ${secondGuard.value?.key}")
-
 }
+
+val dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")
+val shiftBeganRegex = """\[(\d+-\d+-\d+\W\d+:\d+)\]\WGuard\W#(\d+)\Wbegins\Wshift""".toRegex()
+val fellAsleepRegex = """\[(\d+-\d+-\d+\W\d+:\d+)\]\Wfalls\Wasleep""".toRegex()
+val wokeUpRegex = """\[(\d+-\d+-\d+\W\d+:\d+)\]\Wwakes\Wup""".toRegex()
 
 fun parseDateTime(time: String) : LocalDateTime {
     return LocalDateTime.parse(time, dateFormatter)
