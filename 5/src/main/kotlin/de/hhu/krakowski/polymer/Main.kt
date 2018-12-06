@@ -16,12 +16,9 @@ fun main(args: Array<String>) {
     val input = System.`in`.bufferedReader().use { it.readText() }.trim()
 
     // Task 1
-    var then = System.nanoTime()
     println("${react(input).length} units remain after fully reacting the polymer")
-    println(System.nanoTime() - then)
 
     // Task 2
-    then = System.nanoTime()
     val length = Stream.iterate('A') { it + 1 }
             .limit('Z' - 'A')
             .parallel()
@@ -29,7 +26,6 @@ fun main(args: Array<String>) {
             .map { react(it).length }
             .toList()
             .minBy { it } ?: -1
-    println(System.nanoTime() - then)
 
     println("the length of the shortest polymer is ${length}")
 }
